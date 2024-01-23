@@ -30,6 +30,12 @@ const createNewUser = async (req, res) => {
             return res.status(400).send({ status: "Error", message: "Email is required" });
         }
 
+        const emailAlreadyRegistered = await userService.isEmailAlreadyRegistered(req.body.email);
+
+        if (emailAlreadyRegistered) {
+            return res.status(400).send({ status: "Error", message: "Email is already registered" });
+        }
+
         const userData = {
             email: req.body.email,
             id_estilo: req.body.id_estilo,

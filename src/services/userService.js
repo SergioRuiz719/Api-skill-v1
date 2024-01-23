@@ -21,16 +21,29 @@ const getOneUser = async (userId) => {
 };
 
 
+const isEmailAlreadyRegistered = async (email) => {
+    try {
+        const existingUser = await User.findOne({ email });
+        return existingUser !== null;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const createNewUser = async (userData) => {
     try {
+        const emailAlreadyRegistered = await isEmailAlreadyRegistered(userData.email);
+
+        if (emailAlreadyRegistered) {
+            throw new Error("Email is already registered");
+        }
+
         const newUser = new User(userData);
         const savedUser = await newUser.save();
-
         return savedUser;
     } catch (error) {
         throw error;
     }
-
 };
 
 const updateOneUser = async (userId, updatedUserData) => {
@@ -75,6 +88,7 @@ module.exports = {
     getAllUsers,
     getOneUser,
     createNewUser,
+    isEmailAlreadyRegistered,
     updateOneUser,
     updateOneUserEstilo,
     updateOneUserPerfil,
