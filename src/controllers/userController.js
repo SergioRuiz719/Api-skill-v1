@@ -42,7 +42,7 @@ const createNewUser = async (req, res) => {
             nombre: req.body.nombre,
             edad: req.body.edad,
         };
-
+        
         const newUser = await userService.createNewUser(userData);
 
         res.status(201).send({ status: "OK", data: newUser });
